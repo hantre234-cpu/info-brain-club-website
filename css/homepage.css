@@ -1043,6 +1043,10 @@ body.nav-open .nav-toggle span:nth-child(3) {
         animation: slideDown 0.3s ease;
         border: 1px solid var(--border-color);
     }
+    .links{
+        margin-bottom: 15px;
+        text-align: center;
+    }
     
     @keyframes slideDown {
         from { opacity: 0; transform: translateY(-10px); }

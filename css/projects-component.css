@@ -68,9 +68,9 @@
     font-size: 1.2rem;
 }
 
-.projects-component .badge {
+.badge {
     padding: 0.25rem 1rem;
-    border-radius: 50px;
+    border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.02em;
