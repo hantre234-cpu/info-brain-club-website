@@ -1,192 +1,192 @@
 ;(function () {
-  "use strict";
+  'use strict';
 
-  function getEventIdFromUrl() {
-    var params = new URLSearchParams(window.location.search);
-    return params.get("id");
+  function getEventId() {
+    return new URLSearchParams(window.location.search).get('id');
   }
 
-  function setText(id, value) {
-    var el = document.getElementById(id);
-    if (el) {
-      el.textContent = value;
-    }
+  function setText(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
   }
 
-  function updateSeatsUI(taken, total) {
-    var takenEl = document.getElementById("taken-seats");
-    var totalEl = document.getElementById("total-seats");
-    var progressEl = document.getElementById("seats-progress");
-
-    if (takenEl) takenEl.textContent = String(taken);
-    if (totalEl) totalEl.textContent = String(total);
-
-    var percent = total > 0 ? (taken / total) * 100 : 0;
-    if (progressEl) {
-      progressEl.style.width = percent + "%";
-    }
+  function setSeatsUI(taken, total) {
+    setText('taken-seats', taken);
+    setText('total-seats', total);
+    const pct = total > 0 ? Math.min(100, (taken / total) * 100) : 0;
+    const fill = document.getElementById('seats-progress');
+    if (fill) fill.style.width = pct + '%';
   }
 
-  function showError(message) {
-    var el = document.getElementById("event-error");
-    if (!el) return;
-    el.textContent = message;
-    el.hidden = false;
+  function showError(msg) {
+    const el = document.getElementById('event-error');
+    if (el) { el.textContent = msg; el.hidden = false; }
   }
 
-  async function loadEventAndWireRegistration() {
-    var eventId = getEventIdFromUrl();
-    var registerBtn = document.getElementById("register-btn");
+  async function init() {
+    const eventId   = getEventId();
+    const regBtn    = document.getElementById('register-btn');
+    const cancelBtn = document.getElementById('cancel-reg-btn');
 
     if (!eventId) {
-      showError("Invalid event link.");
-      if (registerBtn) registerBtn.disabled = true;
+      showError('Invalid event link.');
+      if (regBtn) regBtn.disabled = true;
       return;
     }
 
-    var totalSeats = 0;
-    var takenSeats = 0;
-    var currentEvent = null;
-
-    if (typeof getSupabaseClient !== "function") {
-      showError("Cannot load event data (Supabase client missing).");
-      if (registerBtn) registerBtn.disabled = true;
+    if (typeof getSupabaseClient !== 'function') {
+      showError('Cannot load event data.');
       return;
     }
+
+    let ev = null, taken = 0, total = 0;
 
     try {
-      var client = await getSupabaseClient();
-      var resp = await client
-        .from("events")
-        .select("id,title,description,location,event_date,event_time,category,image_url,capacity,regis_user")
-        .eq("id", eventId)
+      const client = await getSupabaseClient();
+      const resp = await client
+        .from('events')
+        .select('id,title,description,location,event_date,event_time,category,image_url,capacity,regis_user')
+        .eq('id', eventId)
         .single();
 
-      if (resp.error || !resp.data) {
-        throw resp.error || new Error("Event not found");
+      if (resp.error || !resp.data) throw resp.error || new Error('Event not found');
+      ev = resp.data;
+
+      setText('event-title', ev.title || 'Event');
+      setText('event-category-pill', ev.category || 'Event');
+      setText('event-description', ev.description || '');
+      setText('event-long-description', ev.description || '');
+      setText('event-date-text', ev.event_date || 'Date TBA');
+      setText('event-time-text', ev.event_time || 'Time TBA');
+      setText('event-location-text', ev.location || 'Location TBA');
+
+      const img  = document.getElementById('event-image');
+      if (img && ev.image_url) img.src = ev.image_url;
+
+      const chip = document.getElementById('event-chip-text');
+      if (chip) chip.textContent = ev.category || 'Upcoming';
+
+      total = typeof ev.capacity  === 'number' ? ev.capacity  : 0;
+      taken = typeof ev.regis_user === 'number' ? ev.regis_user : 0;
+      setSeatsUI(taken, total);
+
+      // Check if user is already registered
+      const { data: { user } } = await client.auth.getUser();
+      if (user) {
+        const { count } = await client
+          .from('event_registrations')
+          .select('id', { count: 'exact', head: true })
+          .eq('event_id', eventId)
+          .eq('user_id', user.id);
+
+        if (count > 0) {
+          _showCancelState(regBtn, cancelBtn);
+        }
       }
 
-      currentEvent = resp.data;
-
-      // Fill header
-      setText("event-title", currentEvent.title || "Event");
-      setText("event-category-pill", currentEvent.category || "Event");
-
-      var shortDesc = currentEvent.description || "";
-      setText("event-description", shortDesc);
-      setText("event-long-description", shortDesc);
-
-      setText("event-date-text", currentEvent.event_date || "Date TBA");
-      setText("event-time-text", currentEvent.event_time || "Time TBA");
-      setText("event-location-text", currentEvent.location || "Location TBA");
-
-      var img = document.getElementById("event-image");
-      if (img && currentEvent.image_url) {
-        img.src = currentEvent.image_url;
-      }
-
-      var chip = document.getElementById("event-chip-text");
-      if (chip) {
-        chip.textContent = currentEvent.category || "Upcoming";
-      }
-
-      totalSeats = typeof currentEvent.capacity === "number" ? currentEvent.capacity : 0;
-      takenSeats = typeof currentEvent.regis_user === "number" ? currentEvent.regis_user : 0;
-      updateSeatsUI(takenSeats, totalSeats);
-    } catch (e) {
-      console.error("Error loading event:", e);
-      showError("Could not load this event.");
-      if (registerBtn) registerBtn.disabled = true;
+    } catch (err) {
+      console.error('Error loading event:', err);
+      showError('Could not load this event.');
+      if (regBtn) regBtn.disabled = true;
       return;
     }
 
-    async function handleRegisterClick() {
-      if (typeof redirectIfGuest === "function") {
-        var allowed = await redirectIfGuest();
-        if (!allowed) return;
-      }
+    /* ── REGISTER ── */
+    regBtn?.addEventListener('click', async () => {
+      const allowed = await redirectIfGuest();
+      if (!allowed) return;
 
-      if (takenSeats >= totalSeats && totalSeats > 0) {
-        if (typeof showNotification === "function") {
-          showNotification("This event is full.", "warning");
-        }
+      if (total > 0 && taken >= total) {
+        showNotification('This event is fully booked.', 'warning');
         return;
       }
 
+      regBtn.disabled = true;
+      regBtn.textContent = 'Registering...';
+
       try {
-        var client = await getSupabaseClient();
-        var userResp = await client.auth.getUser();
-        var user = userResp && userResp.data ? userResp.data.user : null;
+        const client = await getSupabaseClient();
+        const { data: { user } } = await client.auth.getUser();
+        if (!user) { window.location.href = '/index.html'; return; }
 
-        if (!user) {
-          if (typeof showNotification === "function") {
-            showNotification("You must sign in first", "warning");
-          }
-          setTimeout(function () {
-            window.location.href = "/index.html";
-          }, 800);
+        // Duplicate check
+        const { count } = await client
+          .from('event_registrations')
+          .select('id', { count: 'exact', head: true })
+          .eq('event_id', ev.id)
+          .eq('user_id', user.id);
+
+        if (count > 0) {
+          showNotification('You are already registered for this event.', 'info');
+          _showCancelState(regBtn, cancelBtn);
           return;
         }
 
-        // Prevent duplicate registrations
-        var existingResp = await client
-          .from("event_registrations")
-          .select("id", { count: "exact", head: true })
-          .eq("event_id", currentEvent.id)
-          .eq("user_id", user.id);
+        const { error: insErr } = await client
+          .from('event_registrations')
+          .insert({ event_id: ev.id, user_id: user.id });
 
-        if (!existingResp.error && existingResp.count > 0) {
-          if (typeof showNotification === "function") {
-            showNotification("You are already registered for this event.", "info");
-          }
-          return;
-        }
+        if (insErr) throw insErr;
 
-        var insertResp = await client
-          .from("event_registrations")
-          .insert({
-            event_id: currentEvent.id,
-            user_id: user.id
-          });
+        taken += 1;
+        await client.from('events').update({ regis_user: taken }).eq('id', ev.id);
+        setSeatsUI(taken, total);
 
-        if (insertResp.error) {
-          throw insertResp.error;
-        }
+        showNotification('Successfully registered! 🎉', 'success');
+        _showCancelState(regBtn, cancelBtn);
 
-        takenSeats += 1;
-
-        // Sync regis_user column
-        try {
-          await client
-            .from("events")
-            .update({ regis_user: takenSeats })
-            .eq("id", currentEvent.id);
-        } catch (syncError) {
-          console.error("Error updating regis_user for event:", syncError);
-        }
-
-        updateSeatsUI(takenSeats, totalSeats);
-
-        var msg = "You have registered for this event.";
-        if (typeof showNotification === "function") {
-          showNotification(msg, "success");
-        } else {
-          alert(msg);
-        }
       } catch (err) {
-        console.error("Error registering for event:", err);
-        if (typeof showNotification === "function") {
-          showNotification("Could not complete registration.", "error");
-        }
+        console.error('Registration error:', err);
+        showNotification('Registration failed. Please try again.', 'error');
+        regBtn.disabled = false;
+        regBtn.textContent = 'Register Now';
       }
-    }
+    });
 
-    if (registerBtn) {
-      registerBtn.addEventListener("click", handleRegisterClick);
-    }
+    /* ── CANCEL REGISTRATION ── */
+    cancelBtn?.addEventListener('click', async () => {
+      if (!confirm('Cancel your registration for this event?')) return;
+      cancelBtn.disabled = true;
+      cancelBtn.textContent = 'Cancelling...';
+
+      try {
+        const client = await getSupabaseClient();
+        const { data: { user } } = await client.auth.getUser();
+        if (!user) { window.location.href = '/index.html'; return; }
+
+        const { error } = await client
+          .from('event_registrations')
+          .delete()
+          .eq('event_id', ev.id)
+          .eq('user_id', user.id);
+
+        if (error) throw error;
+
+        if (taken > 0) taken -= 1;
+        await client.from('events').update({ regis_user: taken }).eq('id', ev.id);
+        setSeatsUI(taken, total);
+
+        showNotification('Registration cancelled.', 'info');
+        _showRegisterState(regBtn, cancelBtn);
+
+      } catch (err) {
+        console.error('Cancel error:', err);
+        showNotification('Could not cancel registration.', 'error');
+        cancelBtn.disabled = false;
+        cancelBtn.textContent = 'Cancel Registration';
+      }
+    });
   }
 
-  // Kick off
-  loadEventAndWireRegistration();
-})();
+  function _showCancelState(reg, cancel) {
+    if (reg)    { reg.style.display = 'none'; }
+    if (cancel) { cancel.style.display = ''; cancel.disabled = false; cancel.textContent = 'Cancel Registration'; }
+  }
 
+  function _showRegisterState(reg, cancel) {
+    if (cancel) { cancel.style.display = 'none'; }
+    if (reg)    { reg.style.display = ''; reg.disabled = false; reg.textContent = 'Register Now'; }
+  }
+
+  init();
+})();

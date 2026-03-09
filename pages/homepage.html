@@ -1,220 +1,273 @@
 <!DOCTYPE html>
-<html lang="fr">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI House UHBC | Official Landing Page</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="/css/homepage.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI House UHBC | Official Landing Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/homepage.css">
 </head>
-
 <body>
 
-    <header class="header">
-        <nav class="navbar">
-            <div class="nav-container">
-                <a href="/pages/homepage.html" class="logo">
-                    <img src="/assets/aihouse_logo.svg" alt="AI House Logo" class="logo-header">
-                </a>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="/pages/homepage.html" class="logo">
+          <img src="/assets/aihouse_logo.svg" alt="AI House Logo" class="logo-header">
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links">
+            <li class="links"><a href="/pages/homepage.html" id="active-nav-link">Home</a></li>
+            <li class="links"><a href="/pages/about.html">About us</a></li>
+            <li class="links"><a href="/pages/projects.html">Projects</a></li>
+            <li class="links"><a href="/pages/events.html">Events</a></li>
+            <li class="links"><a href="/pages/contact.html">Contact</a></li>
+            <li class="links"><a href="/pages/profile.html" id="dynamic-nav-link">Profile</a></li>
+        </ul>
+        <div id="header-actions"></div>
+        <img src="/assets/uhbc_logo.svg" alt="UHBC Logo" class="logo-header">
+      </div>
+    </nav>
+  </header>
 
-                <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
 
-                <ul class="nav-links">
-                    <li class="links"><a href="/pages/homepage.html" id="active-nav-link">Home</a></li>
-                    <li class="links"><a href="/pages/about.html">About us</a></li>
-                    <li class="links"><a href="/pages/projects.html">Projects</a></li>
-                    <li class="links"><a href="/pages/events.html">Events</a></li>
-                    <li class="links"><a href="/pages/contact.html">Contact</a></li>
-                    <li class="links"><a href="/pages/profile.html" id="dynamic-nav-link">Profile</a></li>
-                </ul>
 
-                <div id="header-actions">
-                </div>
 
-                <img src="/assets/uhbc_logo.svg" alt="UHBC Logo" class="logo-header">
-            </div>
-        </nav>
-    </header>
-
-    <section class="hero" id="home">
-        <div class="hero-bg"></div>
-        <div class="hero-greeting">
-            <span class="greeting-tag">UNIVERSITY HASSIBA BEN BOUALI OF CHLEF</span>
-            <h1><span class="A-text">Artificial</span><span class="i-text"> intelligence</span> House</h1>
-            <p class="greeting-text">
-                A collaborative space where students, researchers, and partners explore,
-                learn, and build real-world AI solutions for our community and beyond.
-            </p>
-            <div class="greeting-buttons">
-                <a href="/pages/projects.html" class="btn btn-primary">Discover Projects</a>
-                <a href="/index.html" class="btn btn-secondary" id="joinCommunityBtn">Join Community</a>
-            </div>
-        </div>
-
-        <div class="hero-slider">
-            <div class="mini-slide active" data-index="0">
-                <div class="slide-bg">
-                    <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&w=800"
-                        alt="AI Technology" loading="lazy">
-                </div>
-                <div class="slide-overlay">
-                    <div class="slide-tags">
-                        <span class="tag tag-green">Training</span>
-                        <span class="tag tag-orange">Workshop</span>
-                    </div>
-                    <h3 class="slide-title">Deep Learning Workshop Series</h3>
-                    <p class="slide-desc">Join our hands-on workshops covering neural networks, computer vision, and NLP
-                        techniques.</p>
-                    <a href="/pages/events.html" class="slide-readmore">Read More</a>
-                </div>
-            </div>
-
-            <div class="mini-slide" data-index="1">
-                <div class="slide-bg">
-                    <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&w=800"
-                        alt="Innovation" loading="lazy">
-                </div>
-                <div class="slide-overlay">
-                    <div class="slide-tags">
-                        <span class="tag tag-green">Innovation</span>
-                        <span class="tag tag-blue">Competition</span>
-                    </div>
-                    <h3 class="slide-title">Startup Pitch Competition 2026</h3>
-                    <p class="slide-desc">Showcase your AI-powered startup idea and win funding, mentorship, and
-                        resources.</p>
-                    <a href="/pages/events.html" class="slide-readmore">Read More</a>
-                </div>
-            </div>
-
-            <div class="mini-slide" data-index="2">
-                <div class="slide-bg">
-                    <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&w=800"
-                        alt="Research" loading="lazy">
-                </div>
-                <div class="slide-overlay">
-                    <div class="slide-tags">
-                        <span class="tag tag-green">Research</span>
-                        <span class="tag tag-orange">Symposium</span>
-                    </div>
-                    <h3 class="slide-title">Research Symposium 2026</h3>
-                    <p class="slide-desc">Present your research findings and explore cutting-edge AI research at UHBC.
-                    </p>
-                    <a href="/pages/events.html" class="slide-readmore">Read More</a>
-                </div>
-            </div>
-
-            <div class="mini-slide" data-index="3">
-                <div class="slide-bg">
-                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&w=800" alt="Ethics"
-                        loading="lazy">
-                </div>
-                <div class="slide-overlay">
-                    <div class="slide-tags">
-                        <span class="tag tag-green">Ethics</span>
-                        <span class="tag tag-blue">Roundtable</span>
-                    </div>
-                    <h3 class="slide-title">AI Ethics Roundtable</h3>
-                    <p class="slide-desc">Join the discussion on responsible AI development and ethical considerations.
-                    </p>
-                    <a href="/pages/events.html" class="slide-readmore">Read More</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="marquee-section">
-        <div class="marquee-row">
-            <div class="marquee-content">
-                <div class="marquee-item">University Hassiba Ben Bouali Chlef <div class="orange-dot"></div> AI House
-                    <div class="orange-dot"></div>
-                </div>
-                <div class="marquee-item">University Hassiba Ben Bouali Chlef <div class="orange-dot"></div> AI House
-                    <div class="orange-dot"></div>
-                </div>
-                <div class="marquee-item">University Hassiba Ben Bouali Chlef <div class="orange-dot"></div> AI House
-                    <div class="orange-dot"></div>
-                </div>
-                <div class="marquee-item">University Hassiba Ben Bouali Chlef <div class="orange-dot"></div> AI House
-                    <div class="orange-dot"></div>
-                </div>
-                <div class="marquee-item">University Hassiba Ben Bouali Chlef <div class="orange-dot"></div> AI House
-                    <div class="orange-dot"></div>
-                </div>
-                <div class="marquee-item">University Hassiba Ben Bouali Chlef <div class="orange-dot"></div> AI House
-                    <div class="orange-dot"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="latest-section reveal" id="events">
-    <h2 class="section-title">Latest News & Events</h2>
-    <div class="grid-2x2" id="events-grid">
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="greeting-tag">University Hassiba Ben Bouali of Chlef</span>
+      <h1>
+        <span class="A-text">Artificial</span><span class="i-text"> Intelligence</span> House
+      </h1>
+      <p class="hero-desc">
+        A collaborative space where students, researchers, and partners explore,
+        learn, and build real-world AI solutions for our community and beyond.
+      </p>
+      <div class="hero-btns">
+        <a href="/pages/projects.html" class="btn btn-primary">Discover Projects</a>
+        <a href="/index.html" class="btn btn-secondary">Join Community</a>
+      </div>
     </div>
-    <div class="events-empty hidden" id="events-empty" style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#4A4A4A;font-style:italic;">
-        <p>No upcoming events at the moment. Check back soon!</p>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <div class="marquee-content" aria-hidden="true">
+        <div class="marquee-item">University Hassiba Ben Bouali Chlef <div class="orange-dot"></div> AI House <div class="orange-dot"></div></div>
+        <div class="marquee-item">University Hassiba Ben Bouali Chlef <div class="orange-dot"></div> AI House <div class="orange-dot"></div></div>
+        <div class="marquee-item">University Hassiba Ben Bouali Chlef <div class="orange-dot"></div> AI House <div class="orange-dot"></div></div>
+        <div class="marquee-item">University Hassiba Ben Bouali Chlef <div class="orange-dot"></div> AI House <div class="orange-dot"></div></div>
+        <div class="marquee-item">University Hassiba Ben Bouali Chlef <div class="orange-dot"></div> AI House <div class="orange-dot"></div></div>
+        <div class="marquee-item">University Hassiba Ben Bouali Chlef <div class="orange-dot"></div> AI House <div class="orange-dot"></div></div>
+      </div>
     </div>
-</section>
+  </div>
 
-    <footer class="footer">
-        <div class="footer-col logo">
-            <img src="/assets/aihouse_logo_white.svg" alt="AI House Logo" class="logo-footer" loading="lazy">
-        </div>
-        <div class="footer-col footer-quick">
-            <h3>Quick Links</h3>
-            <ul class="footer-links">
-                <li><a href="/pages/about.html">- About AI House</a></li>
-                <li><a href="/pages/projects.html">- Our Projects</a></li>
-                <li><a href="/pages/events.html">- Events Calendar</a></li>
-                <li><a href="/pages/contact.html">- Contact</a></li>
-            </ul>
-        </div>
-        <div class="footer-col footer-contact">
-            <h3>Contact Us</h3>
-            <p>
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                </svg>
-                Chlef, Algeria
-            </p>
-            <p>
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                    <polyline points="22,6 12,13 2,6" />
-                </svg>
-                aihouse@univ-chlef.dz
-            </p>
-            <div class="social-icons">
-                <a href="https://www.facebook.com/people/AI-HOUSE-UHBC/61585214978330/" aria-label="Facebook"
-                    target="_blank" rel="noopener">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-                    </svg>
-                </a>
-                <a href="https://www.instagram.com/aihouseuhbc/" aria-label="Instagram" target="_blank" rel="noopener">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                        <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </footer>
+  <!-- NEWS SECTION -->
+  <section class="section news-section reveal" id="news">
+    <div class="section-head">
+      <span class="section-tag">Latest</span>
+      <h2 class="section-title">University News</h2>
+      <p class="section-desc">Stay informed with the latest news from Hassiba Ben Bouali University</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="news-grid" id="newsGrid">
+      <div class="news-loading">
+        <div class="news-spinner"></div>
+        <p>Loading news...</p>
+      </div>
+    </div>
+  </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"
-        crossorigin="anonymous"></script>
-    <script src="/js/utils.js"></script>
-    <script src="/js/navbar.js"></script>
-    <script src="/js/homepage.js"></script>
+  <!-- ══════════════════════════════════════════
+       PILLARS SECTION HTML
+  ══════════════════════════════════════════ -->
+  <section class="pillars-section" id="pillars">
+
+    <div class="intro-container">
+      <h2>Our Pillars</h2>
+    </div>
+
+    <div class="carousel-container" tabindex="0" id="carousel" aria-label="Pillars carousel">
+
+      <button class="carousel-arrow left"  aria-label="Previous" id="prevBtn">&#8592;</button>
+      <button class="carousel-arrow right" aria-label="Next"     id="nextBtn">&#8594;</button>
+
+      <div class="pillar-card">
+        <h3>Research</h3>
+        <p>Scientific exploration driving breakthrough discoveries in machine learning, computer vision, and NLP.</p>
+      </div>
+
+      <div class="pillar-card">
+        <h3>Training</h3>
+        <p>Hands-on workshops and courses for all levels — from beginners to advanced practitioners.</p>
+      </div>
+
+      <div class="pillar-card">
+        <h3>Ethics</h3>
+        <p>Promoting responsible AI use and algorithmic fairness through dedicated frameworks.</p>
+      </div>
+
+      <div class="pillar-card">
+        <h3>Innovation</h3>
+        <p>Supporting startups from concept to market with mentorship and industry connections.</p>
+      </div>
+
+    </div>
+
+    <div class="carousel-dots" id="carouselDots"></div>
+
+  </section>
+
+  <!-- EVENTS SECTION -->
+  <section class="section events-section reveal" id="events">
+    <div class="section-head">
+      <span class="section-tag">Upcoming</span>
+      <h2 class="section-title">Latest Events</h2>
+      <p class="section-desc">Join our workshops, seminars, and competitions at AI House UHBC</p>
+      <div class="section-line"></div>
+    </div>
+    <div class="events-grid" id="eventsGrid">
+      <div class="events-loading">
+        <div class="events-spinner"></div>
+        <p>Loading events...</p>
+      </div>
+    </div>
+    <div class="events-view-all">
+      <a href="/pages/events.html" class="btn btn-secondary">View All Events</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-col logo">
+      <img src="/assets/aihouse_logo_white.svg" alt="AI House Logo" class="logo-footer" loading="lazy">
+    </div>
+    <div class="footer-col footer-quick">
+      <h3>Quick Links</h3>
+      <ul class="footer-links">
+        <li><a href="/pages/about.html">- About AI House</a></li>
+        <li><a href="/pages/projects.html">- Our Projects</a></li>
+        <li><a href="/pages/events.html">- Events Calendar</a></li>
+        <li><a href="/pages/contact.html">- Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-contact">
+      <h3>Contact Us</h3>
+      <p>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+        </svg>Chlef, Algeria
+      </p>
+      <p>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>aihouse@univ-chlef.dz
+      </p>
+      <div class="social-icons">
+        <a href="https://www.facebook.com/people/AI-HOUSE-UHBC/61585214978330/" aria-label="Facebook" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/aihouseuhbc/" aria-label="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════
+       PILLARS SECTION JS
+  ══════════════════════════════════════════ -->
+  <script>
+    (function () {
+      const slides   = document.querySelectorAll('.pillar-card');
+      const dotsWrap = document.getElementById('carouselDots');
+      let current    = 0;
+      let autoTimer;
+
+      /* ── Build dot indicators ── */
+      slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className   = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+        dot.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(dot);
+      });
+
+      /* ── Core update function ── */
+      function updateCarousel() {
+        const n = slides.length;
+        slides.forEach((s, i) => {
+          s.className = 'pillar-card';
+          if      (i === current)                        s.classList.add('active');
+          else if (i === (current - 1 + n) % n)         s.classList.add('prev');
+          else if (i === (current + 1) % n)              s.classList.add('next');
+          else                                           s.classList.add('hidden');
+        });
+
+        dotsWrap.querySelectorAll('.carousel-dot').forEach((d, i) => {
+          d.classList.toggle('active', i === current);
+        });
+      }
+
+      function goTo(idx) {
+        current = (idx + slides.length) % slides.length;
+        updateCarousel();
+        resetAuto();
+      }
+
+      function nextSlide() { goTo(current + 1); }
+      function prevSlide() { goTo(current - 1); }
+
+      /* ── Auto-advance every 4 s ── */
+      function startAuto() { autoTimer = setInterval(nextSlide, 4000); }
+      function resetAuto()  { clearInterval(autoTimer); startAuto(); }
+
+      /* ── Arrow buttons ── */
+      document.getElementById('nextBtn').addEventListener('click', nextSlide);
+      document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+      /* ── Keyboard navigation ── */
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') nextSlide();
+        if (e.key === 'ArrowLeft')  prevSlide();
+      });
+
+      /* ── Touch / swipe support ── */
+      const carousel = document.getElementById('carousel');
+      let touchStartX = 0;
+      carousel.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+      carousel.addEventListener('touchend',   (e) => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) diff > 0 ? nextSlide() : prevSlide();
+      });
+
+      /* ── Pause on hover ── */
+      carousel.addEventListener('mouseenter', () => clearInterval(autoTimer));
+      carousel.addEventListener('mouseleave', startAuto);
+
+      /* ── Init ── */
+      updateCarousel();
+      startAuto();
+    })();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" crossorigin="anonymous"></script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/navbar.js"></script>
+  <script src="/js/homepage.js"></script>
 </body>
-
 </html>

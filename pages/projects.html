@@ -1,52 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects | AI House UHBC</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700&display=swap"
-        rel="stylesheet">
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700&display=swap"
+    rel="stylesheet">
     <link rel="stylesheet" href="/css/homepage.css">
     <link rel="stylesheet" href="/css/projects-main.css">
     <link rel="stylesheet" href="/css/projects-section.css">
     <link rel="stylesheet" href="/css/projects-component.css">
-</head>
-
-<body>
+  </head>
+  
+  <body>
     <header class="header">
-        <nav class="navbar">
-            <div class="nav-container">
-                <a href="/pages/homepage.html" class="logo">
-                    <img src="/assets/aihouse_logo.svg" alt="AI House Logo" class="logo-header">
-                </a>
-                <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li class="links"><a href="/pages/homepage.html">Home</a></li>
-                    <li class="links"><a href="/pages/about.html">About us</a></li>
-                    <li class="links"><a href="/pages/projects.html" id="active-nav-link">Projects</a></li>
-                    <li class="links"><a href="/pages/events.html">Events</a></li>
-                    <li class="links"><a href="/pages/contact.html">Contact</a></li>
-                    <li class="links"><a href="/pages/profile.html" id="dynamic-nav-link">Profile</a></li>
-                </ul>
-                <div id="header-actions"></div>
-                <img src="/assets/uhbc_logo.svg" alt="UHBC Logo" class="logo-header">
-            </div>
-        </nav>
+      <nav class="navbar">
+        <div class="nav-container">
+          <a href="/pages/homepage.html" class="logo">
+            <img src="/assets/aihouse_logo.svg" alt="AI House Logo" class="logo-header">
+          </a>
+          <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li class="links"><a href="/pages/homepage.html">Home</a></li>
+            <li class="links"><a href="/pages/about.html">About us</a></li>
+            <li class="links"><a href="/pages/projects.html" id="active-nav-link">Projects</a></li>
+            <li class="links"><a href="/pages/events.html">Events</a></li>
+            <li class="links"><a href="/pages/contact.html">Contact</a></li>
+            <li class="links"><a href="/pages/profile.html" id="dynamic-nav-link">Profile</a></li>
+          </ul>
+          <div id="header-actions"></div>
+          <img src="/assets/uhbc_logo.svg" alt="UHBC Logo" class="logo-header">
+        </div>
+      </nav>
     </header>
+    
+    <!-- UNIFIED PAGE HERO -->
+    <div class="page-hero">
+      <div class="page-hero-inner">
+        <span class="page-hero-tag">Research &amp; Innovation</span>
+        <h1 class="page-hero-title">Our Projects</h1>
+        <p class="page-hero-desc">Explore student projects and faculty research initiatives at AI House UHBC.</p>
+        <div class="page-hero-line"></div>
+      </div>
+    </div>
 
     <main>
         <section class="projects" id="projects" style="padding: 80px 0 60px;">
             <div class="container">
-                <h2 class="section-title">Projects</h2>
-                <p class="section-description">Explore student projects and faculty research at AI House.</p>
-                <div class="hero-underline"></div>
-
+                
                 <div class="tabs">
                     <button class="tab-button active" data-tab="students">Students</button>
                     <button class="tab-button" data-tab="research">Research</button>
@@ -75,8 +81,8 @@
                                 <h3 class="card__title">Autonomous Drone Swarm Coordination</h3>
                                 <span class="badge badge--ongoing">Ongoing</span>
                             </div>
-                            <p class="card__field">AI/Robotics</p>
-                            <p class="card__team">Team: Sarah Chen, Mike Ross</p>
+                             <p class="card__field">AI/Robotics</p>
+                             <p class="card__team">Team: Sarah Chen, Mike Ross</p>
                         </div>
                         <div class="project-card" data-field="BioTech" data-status="Completed">
                             <div class="card__header">
@@ -197,76 +203,52 @@
             </div>
         </section>
     </main>
-
-    <div id="collabModal" class="modal">
-        <div class="modal__content">
-            <span class="modal__close">&times;</span>
-            <h2>Collaboration Request</h2>
-            <form id="collabForm">
-                <label for="collab-name">Name:</label>
-                <input type="text" id="collab-name" name="name" required>
-                <label for="collab-email">Email:</label>
-                <input type="email" id="collab-email" name="email" required>
-                <label for="collab-message">Message:</label>
-                <textarea id="collab-message" name="message" required></textarea>
-                <button type="submit" class="btn btn--primary">Send Request</button>
-            </form>
-        </div>
+  <!-- Collab Modal -->
+  <div id="collabModal" class="modal">
+    <div class="modal__content">
+      <span class="modal__close">&times;</span>
+      <h2>Collaboration Request</h2>
+      <form id="collabForm">
+        <label for="collab-name">Name:</label>
+        <input type="text" id="collab-name" name="name" required>
+        <label for="collab-email">Email:</label>
+        <input type="email" id="collab-email" name="email" required>
+        <label for="collab-message">Message:</label>
+        <textarea id="collab-message" name="message" required></textarea>
+        <button type="submit" class="btn btn--primary">Send Request</button>
+      </form>
     </div>
+  </div>
 
-    <footer class="footer">
-        <div class="footer-col logo">
-            <img src="/assets/aihouse_logo_white.svg" alt="AI House Logo" class="logo-footer" loading="lazy">
-        </div>
-        <div class="footer-col footer-quick">
-            <h3>Quick Links</h3>
-            <ul class="footer-links">
-                <li><a href="/pages/about.html">- About AI House</a></li>
-                <li><a href="/pages/projects.html">- Our Projects</a></li>
-                <li><a href="/pages/events.html">- Events Calendar</a></li>
-                <li><a href="/pages/contact.html">- Contact</a></li>
-            </ul>
-        </div>
-        <div class="footer-col footer-contact">
-            <h3>Contact Us</h3>
-            <p>
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                </svg>
-                Chlef, Algeria
-            </p>
-            <p>
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                    <polyline points="22,6 12,13 2,6" />
-                </svg>
-                aihouse@univ-chlef.dz
-            </p>
-            <div class="social-icons">
-                <a href="https://www.facebook.com/people/AI-HOUSE-UHBC/61585214978330/" aria-label="Facebook"
-                    target="_blank" rel="noopener">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-                    </svg>
-                </a>
-                <a href="https://www.instagram.com/aihouseuhbc/" aria-label="Instagram" target="_blank" rel="noopener">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                        <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </footer>
+  <footer class="footer">
+    <div class="footer-col logo">
+      <img src="/assets/aihouse_logo_white.svg" alt="AI House Logo" class="logo-footer" loading="lazy">
+    </div>
+    <div class="footer-col footer-quick">
+      <h3>Quick Links</h3>
+      <ul class="footer-links">
+        <li><a href="/pages/about.html">- About AI House</a></li>
+        <li><a href="/pages/projects.html">- Our Projects</a></li>
+        <li><a href="/pages/events.html">- Events Calendar</a></li>
+        <li><a href="/pages/contact.html">- Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-contact">
+      <h3>Contact Us</h3>
+      <p><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Chlef, Algeria</p>
+      <p><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>aihouse@univ-chlef.dz</p>
+      <div class="social-icons">
+        <a href="https://www.facebook.com/people/AI-HOUSE-UHBC/61585214978330/" aria-label="Facebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+        <a href="https://www.instagram.com/aihouseuhbc/" aria-label="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+      </div>
+    </div>
+  </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"
-        crossorigin="anonymous"></script>
-    <script src="/js/utils.js"></script>
-    <script src="/js/navbar.js"></script>
-    <script src="/js/projects-main.js"></script>
-    <script src="/js/projects-tabs.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" crossorigin="anonymous"></script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/navbar.js"></script>
+  <script src="/js/projects-tabs.js"></script>
+  <script src="/js/projects-main.js"></script>
 </body>
-
 </html>
+

@@ -1,149 +1,167 @@
 ;(function () {
-  "use strict";
+  'use strict';
 
-  // Calendar filter buttons (visual only for now)
-  var filterButtons = document.querySelectorAll(".calendar-filters .filter-btn");
+  let allEvents = [];
+  let calYear, calMonth;
 
-  filterButtons.forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      filterButtons.forEach(function (b) {
-        b.classList.remove("active");
-      });
-      btn.classList.add("active");
-    });
-  });
+  /* ── HELPERS ─────────────────────────── */
+  function detailUrl(id) {
+    return id ? `/pages/event-detail.html?id=${encodeURIComponent(id)}` : '/pages/events.html';
+  }
 
-  // Handle calendar day clicks
-  var days = document.querySelectorAll(".calendar-grid .day");
+  function setText(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
 
-  days.forEach(function (day) {
-    day.addEventListener("click", function () {
-      var eventName = day.getAttribute("data-event");
-      if (eventName) {
-        if (typeof showNotification === "function") {
-          showNotification("Event on this day: " + eventName, "info");
-        } else {
-          alert("Event on this day: " + eventName);
-        }
-      } else {
-        if (typeof showNotification === "function") {
-          showNotification("No event scheduled on this day.", "info");
-        } else {
-          alert("No event on this day.");
-        }
+  /* ── RENDER EVENT CARD ───────────────── */
+  function renderCard(ev) {
+    const img   = ev.image_url || 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&w=800';
+    const taken = typeof ev.regis_user === 'number' ? ev.regis_user : 0;
+    const cap   = typeof ev.capacity === 'number' ? ev.capacity : null;
+    const url   = detailUrl(ev.id);
+    return `
+      <article class="event-card">
+        <div class="event-image">
+          <img src="${escapeHtml(img)}" alt="${escapeHtml(ev.title || 'Event')}" loading="lazy"
+               onerror="this.src='https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&w=800'">
+          ${ev.event_date ? `<div class="date-badge">${escapeHtml(ev.event_date)}</div>` : ''}
+        </div>
+        <div class="event-content">
+          <span class="cat-tag">${escapeHtml(ev.category || 'Event')}</span>
+          <h3 class="event-title">${escapeHtml(ev.title || 'Event')}</h3>
+          ${cap ? `<p class="event-seats">Seats: ${taken} / ${cap}</p>` : ''}
+          <div class="event-actions">
+            <a href="${url}" class="event-link">View details</a>
+            <a href="${url}" class="event-register-btn">Register</a>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  /* ── SPOTLIGHT ───────────────────────── */
+  function renderSpotlight(ev) {
+    const section = document.getElementById('spotlightSection');
+    if (!ev || !section) return;
+    section.style.display = '';
+
+    setText('spotCategory', ev.category || 'Upcoming');
+    setText('spotTitle', ev.title || 'Next Event');
+    setText('spotDate', ev.event_date || 'Date TBA');
+    setText('spotTime', ev.event_time || 'Time TBA');
+    setText('spotLocation', ev.location || 'Location TBA');
+
+    const btn = document.getElementById('spotBtn');
+    if (btn) btn.href = detailUrl(ev.id);
+
+    const taken = typeof ev.regis_user === 'number' ? ev.regis_user : 0;
+    const cap   = typeof ev.capacity  === 'number' ? ev.capacity  : 0;
+    if (cap > 0) {
+      document.getElementById('spotSeatsBar').style.display = '';
+      setText('spotTaken', taken);
+      setText('spotCap', cap);
+      const pct = Math.min(100, Math.round((taken / cap) * 100));
+      const fill = document.getElementById('spotFill');
+      if (fill) fill.style.width = pct + '%';
+    }
+
+    const imgWrap = document.getElementById('spotImgWrap');
+    if (imgWrap && ev.image_url) {
+      imgWrap.innerHTML = `<img src="${escapeHtml(ev.image_url)}" alt="${escapeHtml(ev.title || '')}" loading="lazy">`;
+    }
+  }
+
+  /* ── CALENDAR ────────────────────────── */
+  function buildCalendar(events) {
+    const now   = new Date();
+    if (calYear === undefined)  calYear  = now.getFullYear();
+    if (calMonth === undefined) calMonth = now.getMonth();
+
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const label  = document.getElementById('calMonthLabel');
+    const grid   = document.getElementById('calDays');
+    if (!label || !grid) return;
+
+    label.textContent = `${MONTHS[calMonth]} ${calYear}`;
+
+    // Map event dates → titles for this month
+    const eventMap = {};
+    events.forEach(ev => {
+      if (!ev.event_date) return;
+      const d = new Date(ev.event_date);
+      if (d.getFullYear() === calYear && d.getMonth() === calMonth) {
+        const day = d.getDate();
+        if (!eventMap[day]) eventMap[day] = [];
+        eventMap[day].push(ev.title || 'Event');
       }
     });
-  });
 
-  function getEventDetailUrl(evt) {
-    if (!evt || !evt.id) return "/pages/events.html";
-    return "/pages/event-detail.html?id=" + encodeURIComponent(evt.id);
-  }
+    const firstDay = new Date(calYear, calMonth, 1).getDay();
+    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    const todayDate = (now.getFullYear() === calYear && now.getMonth() === calMonth) ? now.getDate() : -1;
 
-  function renderEventCard(evt) {
-    var dateText = evt.event_date || "";
-    var taken = typeof evt.regis_user === "number" ? evt.regis_user : 0;
-    var capacityText = typeof evt.capacity === "number" ? String(evt.capacity) : "—";
-    var seatsText = evt.capacity ? "Seats: " + taken + " / " + capacityText : "";
-    var category = evt.category || "Event";
-    var img = evt.image_url ||
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&w=800";
-
-    var detailsUrl = getEventDetailUrl(evt);
-
-    return (
-      '<div class="event-card" data-event="' + (evt.title || "") + '">' +
-      '  <div class="event-image">' +
-      '    <img src="' + img + '" alt="' + (evt.title || "Event") + '">' +
-      (dateText
-        ? '    <div class="date-badge">' + dateText + "</div>"
-        : "") +
-      "  </div>" +
-      '  <div class="event-content">' +
-      '    <span class="cat-tag">' + category + "</span>" +
-      '    <h3 class="event-title">' + (evt.title || "Event") + "</h3>" +
-      (seatsText
-        ? '    <p class="event-seats">' + seatsText + "</p>"
-        : "") +
-      '    <a href="' + detailsUrl + '" class="event-link">View details</a>' +
-      '    <a href="' + detailsUrl + '" class="event-register-btn">Register</a>' +
-      "  </div>" +
-      "</div>"
-    );
-  }
-
-  function updateNextEventCard(evt) {
-    var titleEl = document.querySelector(".next-event-title-row h2");
-    var seatsLabel = document.querySelector(".next-event-card .seats-label");
-    var metaItems = document.querySelectorAll(".next-event-card .meta-item span:last-child");
-
-    if (!evt || !titleEl || !seatsLabel || metaItems.length < 2) return;
-
-    titleEl.textContent = evt.title || "Next Event";
-
-    var taken = typeof evt.regis_user === "number" ? evt.regis_user : 0;
-    var capacityText = typeof evt.capacity === "number" ? String(evt.capacity) : "—";
-    seatsLabel.innerHTML = "Seats: <strong>" + taken + " / " + capacityText + "</strong>";
-
-    if (evt.event_date) {
-      metaItems[0].textContent = evt.event_date + (evt.event_time ? " · " + evt.event_time : "");
+    let html = '';
+    for (let i = 0; i < firstDay; i++) html += '<div class="cal-day empty"></div>';
+    for (let d = 1; d <= daysInMonth; d++) {
+      const hasEv  = !!eventMap[d];
+      const isToday = d === todayDate;
+      const classes = ['cal-day', hasEv ? 'has-event' : '', isToday ? 'today' : ''].filter(Boolean).join(' ');
+      const tooltip = hasEv ? `<span class="cal-tooltip">${eventMap[d].map(t => escapeHtml(t)).join('<br>')}</span>` : '';
+      html += `<div class="${classes}">${d}${tooltip}</div>`;
     }
-    if (evt.location) {
-      metaItems[1].textContent = evt.location;
-    }
+    grid.innerHTML = html;
   }
 
-  async function loadEvents() {
-    var grid = document.querySelector(".upcoming-grid");
+  function attachCalNav(events) {
+    document.getElementById('calPrev')?.addEventListener('click', () => {
+      calMonth--;
+      if (calMonth < 0) { calMonth = 11; calYear--; }
+      buildCalendar(events);
+    });
+    document.getElementById('calNext')?.addEventListener('click', () => {
+      calMonth++;
+      if (calMonth > 11) { calMonth = 0; calYear++; }
+      buildCalendar(events);
+    });
+  }
+
+  /* ── MAIN ────────────────────────────── */
+  async function init() {
+    const grid = document.getElementById('eventsGrid');
     if (!grid) return;
 
-    // Fallback: if Supabase helpers are not available, keep static HTML
-    if (typeof getSupabaseClient !== "function") {
-      return;
-    }
-
-    grid.innerHTML =
-      '<p style="grid-column:1/-1;text-align:center;padding:32px 0;color:#6b7280;font-size:0.95rem;">Loading events...</p>';
-
     try {
-      var client = await getSupabaseClient();
-      var response = await client
-        .from("events")
-        .select("id,title,description,location,event_date,event_time,category,image_url,capacity,regis_user")
-        .order("event_date", { ascending: true })
-        .order("event_time", { ascending: true });
+      const client = await getSupabaseClient();
+      const today  = new Date().toISOString().split('T')[0];
+      const { data, error } = await client
+        .from('events')
+        .select('id,title,description,location,event_date,event_time,category,image_url,capacity,regis_user')
+        .order('event_date', { ascending: true })
+        .order('event_time', { ascending: true });
 
-      if (response.error) {
-        throw response.error;
+      if (error) throw error;
+
+      allEvents = data || [];
+      const upcoming = allEvents.filter(e => !e.event_date || e.event_date >= today);
+
+      if (!upcoming.length) {
+        grid.innerHTML = '<p class="events-empty">No upcoming events at the moment. Check back soon!</p>';
+      } else {
+        renderSpotlight(upcoming[0]);
+        grid.innerHTML = upcoming.map(renderCard).join('');
       }
 
-      var events = response.data || [];
-      if (!events.length) {
-        grid.innerHTML =
-          '<p style="grid-column:1/-1;text-align:center;padding:32px 0;color:#6b7280;font-size:0.95rem;">No events published yet.</p>';
-        return;
-      }
+      buildCalendar(allEvents);
+      attachCalNav(allEvents);
 
-      // Use the first event as "next event"
-      var nextEvent = events[0];
-      updateNextEventCard(nextEvent);
-
-      grid.innerHTML = events.map(renderEventCard).join("");
-
-      // Wire the main CTA to the next event details
-      var nextEventRegisterBtn = document.getElementById("next-event-register");
-      if (nextEventRegisterBtn && nextEvent) {
-        var nextUrl = getEventDetailUrl(nextEvent);
-        nextEventRegisterBtn.onclick = function () {
-          window.location.href = nextUrl;
-        };
-      }
-    } catch (e) {
-      console.error("Error loading events:", e);
-      grid.innerHTML =
-        '<p style="grid-column:1/-1;text-align:center;padding:32px 0;color:#b91c1c;font-size:0.95rem;">Could not load events.</p>';
+    } catch (err) {
+      console.error('Events load error:', err);
+      grid.innerHTML = '<p class="events-empty">Could not load events. Please try again later.</p>';
+      buildCalendar([]);
+      attachCalNav([]);
     }
   }
 
-  loadEvents();
+  init();
 })();

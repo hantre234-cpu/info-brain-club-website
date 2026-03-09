@@ -1,0 +1,79 @@
+<!--
+  ========================================
+  SHARED NAVBAR COMPONENT
+  Include in every page inside <header class="header">
+  ========================================
+-->
+<header class="header">
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/pages/homepage.html" class="logo">
+        <img src="/assets/aihouse_logo.svg" alt="AI House Logo" class="logo-header">
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="/pages/homepage.html">Home</a></li>
+        <li><a href="/pages/about.html">About us</a></li>
+        <li><a href="/pages/projects.html">Projects</a></li>
+        <li><a href="/pages/events.html">Events</a></li>
+        <li><a href="/pages/contact.html">Contact</a></li>
+        <li><a href="/pages/profile.html" id="dynamic-nav-link">Profile</a></li>
+      </ul>
+
+      <div id="header-actions"></div>
+      <img src="/assets/uhbc_logo.svg" alt="UHBC Logo" class="logo-header">
+    </div>
+  </nav>
+</header>
+
+<!--
+  ========================================
+  SHARED FOOTER COMPONENT
+  ========================================
+-->
+<footer class="footer">
+  <div class="footer-col logo">
+    <img src="/assets/aihouse_logo_white.svg" alt="AI House Logo" class="logo-footer" loading="lazy">
+  </div>
+  <div class="footer-col footer-quick">
+    <h3>Quick Links</h3>
+    <ul class="footer-links">
+      <li><a href="/pages/about.html">- About AI House</a></li>
+      <li><a href="/pages/projects.html">- Our Projects</a></li>
+      <li><a href="/pages/events.html">- Events Calendar</a></li>
+      <li><a href="/pages/contact.html">- Contact</a></li>
+    </ul>
+  </div>
+  <div class="footer-col footer-contact">
+    <h3>Contact Us</h3>
+    <p>
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+      </svg>
+      Chlef, Algeria
+    </p>
+    <p>
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+      aihouse@univ-chlef.dz
+    </p>
+    <div class="social-icons">
+      <a href="https://www.facebook.com/people/AI-HOUSE-UHBC/61585214978330/" aria-label="Facebook" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/aihouseuhbc/" aria-label="Instagram" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</footer>

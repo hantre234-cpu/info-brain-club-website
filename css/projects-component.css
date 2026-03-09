@@ -80,16 +80,22 @@
 .badge--ongoing {
     background: var(--gradient-green);
     color: white;
+    padding: 0.25rem 1rem;
+    border-radius: 20px;
 }
 
 .badge--completed {
     background: var(--gradient-orange);
     color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
 }
 
 .badge--archived {
     background: var(--soft-gray);
     color: var(--charcoal);
+    padding: 0.25rem 1rem;
+    border-radius: 20px;
 }
 
 .card__field {

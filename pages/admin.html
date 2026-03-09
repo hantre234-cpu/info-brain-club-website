@@ -1,179 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | AI House UHBC</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css">
-    <link rel="stylesheet" href="/css/homepage.css">
-    <link rel="stylesheet" href="/css/admin.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | AI House UHBC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/homepage.css">
+  <style>
+    .admin-wrap { padding: 2.5rem 5% 4rem; }
+    .admin-inner { max-width: 75rem; margin: 0 auto; }
+
+    .admin-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
+    .admin-head h1 { font-family: var(--font-display); font-size: clamp(1.5rem,3vw,2rem); color: var(--green); }
+    .admin-head p { color: var(--text-muted); font-size: .875rem; }
+
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem,1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card {
+      background: var(--bg-white); border-radius: var(--radius);
+      border: 1px solid var(--border); padding: 1.25rem 1.5rem;
+      box-shadow: var(--card-shadow);
+    }
+    .stat-card h3 { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: .375rem; }
+    .stat-value { font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: var(--green); }
+
+    .admin-panel {
+      background: var(--bg-white); border-radius: var(--radius);
+      border: 1px solid var(--border); box-shadow: var(--card-shadow);
+      overflow: hidden; margin-bottom: 2rem;
+    }
+    .panel-header {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .75rem;
+      padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, #f8faf8, #f0f5f0);
+    }
+    .panel-header h2 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--green); }
+
+    /* event form */
+    .event-form-wrapper { padding: 1.5rem; border-bottom: 1px solid var(--border); background: #fafcfa; }
+    .event-form-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem,1fr)); gap: .875rem; margin-bottom: .875rem; }
+    .event-form-field label { display: block; font-size: .78rem; font-weight: 600; color: var(--text); margin-bottom: .3rem; }
+    .event-form-field input,
+    .event-form-field textarea {
+      width: 100%; padding: .5rem .75rem;
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      font-family: var(--font-main); font-size: .875rem; color: var(--text);
+      background: var(--bg-white); transition: border-color var(--transition);
+    }
+    .event-form-field input:focus,
+    .event-form-field textarea:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(0,102,51,.08); }
+    .event-form-field textarea { resize: vertical; min-height: 4rem; }
+    .event-form-actions { display: flex; gap: .625rem; }
+
+    /* table */
+    .table-wrapper { overflow-x: auto; }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+    .admin-table th {
+      text-align: left; padding: .75rem 1rem;
+      background: var(--bg); color: var(--text-muted);
+      font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+      border-bottom: 1px solid var(--border);
+    }
+    .admin-table td { padding: .875rem 1rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: var(--bg); }
+    .text-center { text-align: center; color: var(--text-muted); font-style: italic; }
+    .user-cell { display: flex; align-items: center; gap: .625rem; }
+    .user-avatar-small {
+      width: 2rem; height: 2rem; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--green), var(--green-light));
+      color: #fff; font-size: .7rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .role-badge { display: inline-flex; align-items: center; padding: .2rem .6rem; border-radius: var(--radius-pill); font-size: .72rem; font-weight: 600; }
+    .role-user  { background: rgba(0,102,51,.08);   color: var(--green); }
+    .role-admin { background: rgba(168,85,247,.1);  color: #c084fc; }
+    .role-guest { background: rgba(156,163,175,.1); color: #9ca3af; }
+
+    .btn-sm { padding: .3rem .7rem; font-size: .75rem; border-radius: .375rem; }
+    .btn-danger { color: #ef4444; border: 1px solid #ef4444; background: transparent; cursor: pointer; font-family: var(--font-main); font-weight: 600; transition: all var(--transition); }
+    .btn-danger:hover { background: rgba(239,68,68,.08); }
+
+    @media (max-width: 48rem) {
+      .admin-wrap { padding: 1.5rem 5% 3rem; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 30rem) {
+      .stats-row { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-
 <body>
-    <header class="header">
-        <nav class="navbar">
-            <div class="nav-container">
-                <a href="/pages/homepage.html" class="logo">
-                    <img src="/assets/aihouse_logo.svg" alt="AI House Logo" class="logo-header">
-                </a>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="/pages/homepage.html" class="logo">
+          <img src="/assets/aihouse_logo.svg" alt="AI House Logo" class="logo-header">
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+          <li><a href="/pages/homepage.html">Home</a></li>
+          <li><a href="/pages/about.html">About us</a></li>
+          <li><a href="/pages/projects.html">Projects</a></li>
+          <li><a href="/pages/events.html">Events</a></li>
+          <li><a href="/pages/contact.html">Contact</a></li>
+          <li><a href="/pages/admin.html" id="active-nav-link">Admin</a></li>
+        </ul>
+        <div id="header-actions"></div>
+        <img src="/assets/uhbc_logo.svg" alt="UHBC Logo" class="logo-header">
+      </div>
+    </nav>
+  </header>
 
-                <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <span class="page-hero-tag">Admin Only</span>
+      <h1 class="page-hero-title">Admin Dashboard</h1>
+      <p class="page-hero-desc">Manage users, events, and platform settings for AI House UHBC.</p>
+      <div class="page-hero-line"></div>
+    </div>
+  </div>
 
-                <ul class="nav-links">
-                    <li><a href="/pages/homepage.html">Home</a></li>
-                    <li><a href="/pages/about.html">About us</a></li>
-                    <li><a href="/pages/projects.html">Projects</a></li>
-                    <li><a href="/pages/events.html">Events</a></li>
-                    <li><a href="/pages/contact.html">Contact</a></li>
-                    <li><a href="/pages/admin.html" id="active-nav-link">Admin</a></li>
-                </ul>
+  <main class="admin-wrap">
+    <div class="admin-inner">
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <h3>Total Users</h3>
+          <div class="stat-value" id="stat-users">…</div>
+        </div>
+        <div class="stat-card">
+          <h3>Admins</h3>
+          <div class="stat-value" id="stat-admins">…</div>
+        </div>
+      </div>
 
-                <div id="header-actions">
-                </div>
-            </div>
-        </nav>
-    </header>
+      <!-- Users Panel -->
+      <div class="admin-panel">
+        <div class="panel-header">
+          <h2>Registered Users</h2>
+        </div>
+        <div class="table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Is Admin</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminUsersTableBody">
+              <tr><td colspan="6" class="text-center">Loading users...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-    <main class="admin-container">
-        <div class="admin-header">
-            <div>
-                <h1 class="page-title">Admin Dashboard</h1>
-                <p class="page-subtitle">Manage AI House UHBC platform</p>
-            </div>
-            <a href="/pages/profile.html" class="profile-btn">Profile</a>
+      <!-- Events Panel -->
+      <div class="admin-panel">
+        <div class="panel-header">
+          <h2>Events</h2>
+          <button id="toggleEventFormBtn" class="btn btn-primary btn-sm">+ Add Event</button>
         </div>
 
-        <div class="admin-stats-grid">
-            <div class="stat-card">
-                <h3>Total Users</h3>
-                <div class="stat-value" id="stat-users">...</div>
+        <div id="eventFormWrapper" class="event-form-wrapper" style="display:none;">
+          <form id="eventForm">
+            <div class="event-form-row">
+              <div class="event-form-field"><label>Title *</label><input type="text" name="title" required></div>
+              <div class="event-form-field"><label>Category</label><input type="text" name="category" placeholder="Workshop, Training…"></div>
             </div>
-            <div class="stat-card">
-                <h3>Admins</h3>
-                <div class="stat-value" id="stat-admins">...</div>
+            <div class="event-form-row">
+              <div class="event-form-field"><label>Date *</label><input type="date" name="event_date" required></div>
+              <div class="event-form-field"><label>Time</label><input type="time" name="event_time"></div>
+              <div class="event-form-field"><label>Capacity</label><input type="number" name="capacity" min="1" placeholder="30"></div>
             </div>
+            <div class="event-form-row">
+              <div class="event-form-field"><label>Location</label><input type="text" name="location" placeholder="Room A1 B12"></div>
+              <div class="event-form-field"><label>Image URL</label><input type="url" name="image_url" placeholder="https://…"></div>
+            </div>
+            <div class="event-form-row" style="grid-template-columns:1fr;">
+              <div class="event-form-field"><label>Description</label><textarea name="description" rows="2" placeholder="Short description of the event"></textarea></div>
+            </div>
+            <div class="event-form-actions">
+              <button type="submit" class="btn btn-primary btn-sm">Save Event</button>
+              <button type="button" id="cancelEventFormBtn" class="btn btn-secondary btn-sm">Cancel</button>
+            </div>
+          </form>
         </div>
 
-        <div class="admin-content">
-            <div class="admin-panel">
-                <div class="panel-header">
-                    <h2>Registered Users</h2>
-                </div>
-                <div class="table-wrapper">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Is Admin</th>
-                                <th>Joined</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminUsersTableBody">
-                            <tr>
-                                <td colspan="6" class="text-center">Loading users...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="admin-panel" style="margin-top: 32px;">
-                <div class="panel-header">
-                    <h2>Events</h2>
-                    <button id="toggleEventFormBtn" class="btn btn-primary btn-sm" style="width:40%; padding: 6px 100px; font-size: 0.75rem;">
-                        Add Event
-                    </button>
-                </div>
-
-                <div id="eventFormWrapper" class="event-form-wrapper" style="display: none;">
-                    <form id="eventForm" class="event-form">
-                        <div class="event-form-row">
-                            <div class="event-form-field">
-                                <label for="eventTitle">Title</label>
-                                <input type="text" id="eventTitle" name="title" required />
-                            </div>
-                            <div class="event-form-field">
-                                <label for="eventCategory">Category</label>
-                                <input type="text" id="eventCategory" name="category" placeholder="Training, Workshop..." />
-                            </div>
-                        </div>
-                        <div class="event-form-row">
-                            <div class="event-form-field">
-                                <label for="eventDate">Date</label>
-                                <input type="date" id="eventDate" name="event_date" required />
-                            </div>
-                            <div class="event-form-field">
-                                <label for="eventTime">Time</label>
-                                <input type="time" id="eventTime" name="event_time" />
-                            </div>
-                            <div class="event-form-field">
-                                <label for="eventCapacity">Capacity</label>
-                                <input type="number" id="eventCapacity" name="capacity" min="1" placeholder="30" />
-                            </div>
-                        </div>
-                        <div class="event-form-row">
-                            <div class="event-form-field">
-                                <label for="eventLocation">Location</label>
-                                <input type="text" id="eventLocation" name="location" placeholder="Room A1 B12" />
-                            </div>
-                        </div>
-                        <div class="event-form-row">
-                            <div class="event-form-field">
-                                <label for="eventImageUrl">Image URL</label>
-                                <input type="url" id="eventImageUrl" name="image_url" placeholder="https://..." />
-                            </div>
-                        </div>
-                        <div class="event-form-row">
-                            <div class="event-form-field">
-                                <label for="eventDescription">Description</label>
-                                <textarea id="eventDescription" name="description" rows="2"
-                                          placeholder="Short description of the event"></textarea>
-                            </div>
-                        </div>
-                        <div class="event-form-actions">
-                            <button type="submit" class="btn btn-primary btn-sm">Save Event</button>
-                            <button type="button" id="cancelEventFormBtn" class="btn btn-secondary btn-sm">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="table-wrapper">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Category</th>
-                                <th>Capacity</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminEventsTableBody">
-                            <tr>
-                                <td colspan="6" class="text-center">Loading events...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div class="table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Title</th><th>Date</th><th>Time</th><th>Category</th><th>Capacity</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminEventsTableBody">
+              <tr><td colspan="6" class="text-center">Loading events...</td></tr>
+            </tbody>
+          </table>
         </div>
-    </main>
+      </div>
+    </div>
+  </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/utils.js"></script>
-    <script src="/js/navbar.js"></script>
-    <script src="/js/admin.js"></script>
+  <footer class="footer">
+    <div class="footer-col logo"><img src="/assets/aihouse_logo_white.svg" alt="" class="logo-footer" loading="lazy"></div>
+    <div class="footer-col footer-quick">
+      <h3>Quick Links</h3>
+      <ul class="footer-links">
+        <li><a href="/pages/homepage.html">- Home</a></li>
+        <li><a href="/pages/profile.html">- My Profile</a></li>
+        <li><a href="/pages/events.html">- Events</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-contact">
+      <h3>Contact Us</h3>
+      <p><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>aihouse@univ-chlef.dz</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" crossorigin="anonymous"></script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/navbar.js"></script>
+  <script src="/js/admin.js"></script>
 </body>
-
 </html>

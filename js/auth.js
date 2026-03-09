@@ -1,3 +1,9 @@
+/* ==========================================
+   AUTH SERVICE
+   NOTE: Relies on CONFIG and supabaseManager
+   already declared in script.js (loaded first)
+   ========================================== */
+
 class AuthService {
     static async register(userData) {
         const { fullname, username, email, password, role, roleCustom } = userData;
@@ -59,15 +65,18 @@ class AuthService {
 
         let email = id;
         
+        // If identifier doesn't contain @, treat it as username and fetch email
         if (!id.includes('@')) {
-            const { data: emailResult, error } = await supabase.rpc('get_email_by_username', {
-                p_username: id
-            });
+            const { data: userRecord, error } = await supabase
+                .from('users')
+                .select('email')
+                .eq('username', id)
+                .single();
             
-            if (error || !emailResult) {
+            if (error || !userRecord) {
                 throw new Error('No account found with that username');
             }
-            email = emailResult;
+            email = userRecord.email;
         }
 
         const { data, error } = await supabase.auth.signInWithPassword({

@@ -1,115 +1,178 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile | AI House UHBC</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css">
-    <link rel="stylesheet" href="/css/homepage.css">
-    <link rel="stylesheet" href="/css/profile.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile | AI House UHBC</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/homepage.css">
+  <link rel="stylesheet" href="/css/profile.css">
 </head>
-
 <body>
-    <header class="header">
-        <nav class="navbar">
-            <div class="nav-container">
-                <a href="/pages/homepage.html" class="logo">
-                    <img src="/assets/aihouse_logo.svg" alt="AI House Logo" class="logo-header">
-                </a>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="/pages/homepage.html" class="logo">
+          <img src="/assets/aihouse_logo.svg" alt="AI House Logo" class="logo-header">
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+         <ul class="nav-links">
+            <li class="links"><a href="/pages/homepage.html">Home</a></li>
+            <li class="links"><a href="/pages/about.html">About us</a></li>
+            <li class="links"><a href="/pages/projects.html">Projects</a></li>
+            <li class="links"><a href="/pages/events.html">Events</a></li>
+            <li class="links"><a href="/pages/contact.html">Contact</a></li>
+            <li class="links"><a href="/pages/profile.html" id="dynamic-nav-link">Profile</a></li>
+          </ul>
+        <div id="header-actions"></div>
+        <img src="/assets/uhbc_logo.svg" alt="UHBC Logo" class="logo-header">
+      </div>
+    </nav>
+  </header>
 
-                <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+  <main class="profile-wrap">
+    <div class="profile-inner">
 
-                <ul class="nav-links">
-                    <li class="links"><a href="/pages/homepage.html">Home</a></li>
-                    <li class="links"><a href="/pages/about.html">About us</a></li>
-                    <li class="links"><a href="/pages/projects.html">Projects</a></li>
-                    <li class="links"><a href="/pages/events.html">Events</a></li>
-                    <li class="links"><a href="/pages/contact.html">Contact</a></li>
-                    <li class="links"><a href="/pages/profile.html" id="dynamic-nav-link">Profile</a></li>
-                </ul>
+      <!-- Page heading -->
+      <div class="profile-page-head">
+        <span class="head-eyebrow">Account</span>
+        <h1>My Profile</h1>
+      </div>
 
-                <div id="header-actions">
-                </div>
-            </div>
-        </nav>
-    </header>
+      <div class="profile-layout">
 
-    <main class="profile-container">
-        <div class="profile-header">
-            <h1 class="page-title">My Profile</h1>
-            <p class="page-subtitle">Manage your account and settings</p>
-        </div>
-
-        <div class="profile-card">
-            <div class="profile-avatar-section">
-                <div class="avatar-wrapper">
-                    <img id="profile-avatar" src="/assets/uhbc_logo.svg" alt="Avatar">
-                    <div class="avatar-initials" id="profile-initials"></div>
-                </div>
-            </div>
-
-            <div class="profile-info-section" id="profile-display-view">
-                <div class="info-group">
-                    <label>Full Name</label>
-                    <div class="info-value" id="profile-fullname">Loading...</div>
-                </div>
-                <div class="info-group">
-                    <label>Username</label>
-                    <div class="info-value" id="profile-username">Loading...</div>
-                </div>
-                <div class="info-group">
-                    <label>Email</label>
-                    <div class="info-value" id="profile-email">Loading...</div>
-                </div>
-                <div class="info-group">
-                    <label>Role</label>
-                    <div class="info-value"><span class="role-badge" id="profile-role">...</span></div>
-                </div>
-                <div style="grid-column: 1 / -1; margin-top: 15px;">
-                    <button class="btn btn-secondary w-full" id="edit-profile-btn">Edit Profile</button>
-                </div>
+        <!-- LEFT SIDEBAR -->
+        <aside class="profile-sidebar">
+          <div class="sidebar-avatar-card">
+            <!-- Decorative ring -->
+            <div class="avatar-ring-wrap">
+              <svg class="avatar-ring" viewBox="0 0 110 110" fill="none">
+                <circle cx="55" cy="55" r="52" stroke="url(#ringGrad)" stroke-width="1.5" stroke-dasharray="6 4"/>
+                <defs>
+                  <linearGradient id="ringGrad" x1="0" y1="0" x2="110" y2="110" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#1a6635"/>
+                    <stop offset="100%" stop-color="#0d3b1e" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="profile-avatar" id="profileAvatar">
+                <span id="profileInitials">U</span>
+              </div>
             </div>
 
-            <div class="profile-info-section hidden" id="profile-edit-view" style="display: none;">
-                <form id="edit-profile-form" style="width: 100%; display: grid; grid-template-columns: 1fr; gap: 20px;">
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <label for="edit-fullname">Full Name</label>
-                        <input type="text" id="edit-fullname" class="form-control" required
-                            style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-dark);">
-                    </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <label for="edit-username">Username</label>
-                        <input type="text" id="edit-username" class="form-control" required
-                            style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-dark);">
-                    </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <label for="edit-avatar">Avatar URL</label>
-                        <input type="text" id="edit-avatar" class="form-control"
-                            placeholder="https://example.com/avatar.jpg"
-                            style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-dark);">
-                    </div>
-                    <div style="grid-column: 1 / -1; display: flex; gap: 10px; margin-top: 15px;">
-                        <button type="button" class="btn btn-secondary" id="cancel-edit-btn"
-                            style="flex: 1;">Cancel</button>
-                        <button type="submit" class="btn btn-primary" id="save-profile-btn" style="flex: 1;">Save
-                            Changes</button>
-                    </div>
-                </form>
+            <div class="sidebar-name-block">
+              <div class="profile-display-name" id="profileDisplayName">Loading…</div>
+              <div class="profile-username-text" id="profileUsernameText">@…</div>
             </div>
-        </div>
-    </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/utils.js"></script>
-    <script src="/js/navbar.js"></script>
-    <script src="/js/profile.js"></script>
+            <div class="sidebar-role-wrap">
+              <span class="role-badge user" id="profile-role-sidebar">Member</span>
+            </div>
+
+            <button class="btn-edit-trigger" id="editProfileBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit Profile
+            </button>
+          </div>
+        </aside>
+
+        <!-- RIGHT MAIN -->
+        <div class="profile-main">
+
+          <!-- DISPLAY VIEW -->
+          <div id="displayView">
+            <section class="info-section">
+              <h2 class="section-label">Personal Info</h2>
+              <div class="info-grid">
+                <div class="info-group">
+                  <label>Full Name</label>
+                  <div class="info-value" id="profile-fullname">—</div>
+                </div>
+                <div class="info-group">
+                  <label>Username</label>
+                  <div class="info-value" id="profile-username">—</div>
+                </div>
+                <div class="info-group info-group--full">
+                  <label>Email</label>
+                  <div class="info-value" id="profile-email">—</div>
+                </div>
+                <div class="info-group info-group--full bio-group">
+                  <label>Bio</label>
+                  <div class="bio-text" id="profile-bio">No bio yet.</div>
+                </div>
+              </div>
+            </section>
+
+            <section class="info-section">
+              <h2 class="section-label">Role & Access</h2>
+              <div class="role-display-row">
+                <span class="role-badge user" id="profile-role">Member</span>
+                <p class="role-hint">Your role is assigned by the AI House team.</p>
+              </div>
+            </section>
+          </div>
+
+          <!-- EDIT VIEW -->
+          <div id="editView" class="profile-edit-form" style="display:none;">
+            <section class="info-section">
+              <h2 class="section-label">Edit Profile</h2>
+              <form id="editProfileForm" class="edit-form-grid">
+                <div class="form-group">
+                  <label for="editFullname">Full Name</label>
+                  <input type="text" id="editFullname" class="form-control" required placeholder="Your full name">
+                </div>
+                <div class="form-group">
+                  <label for="editUsername">Username</label>
+                  <input type="text" id="editUsername" class="form-control" required placeholder="@username">
+                </div>
+                <div class="form-group form-col-full">
+                  <label for="editBio">Bio</label>
+                  <textarea id="editBio" class="form-control" rows="4" placeholder="Tell us about yourself…"></textarea>
+                </div>
+                <div class="form-group form-col-full">
+                  <label for="editAvatar">Avatar URL</label>
+                  <input type="url" id="editAvatar" class="form-control" placeholder="https://example.com/avatar.jpg">
+                </div>
+                <div class="form-actions form-col-full">
+                  <button type="button" class="btn-ghost" id="cancelEditBtn">Cancel</button>
+                  <button type="submit" class="btn-primary-green" id="saveProfileBtn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </section>
+          </div>
+
+        </div><!-- /.profile-main -->
+      </div><!-- /.profile-layout -->
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-col logo"><img src="/assets/aihouse_logo_white.svg" alt="" class="logo-footer" loading="lazy"></div>
+    <div class="footer-col footer-quick">
+      <h3>Quick Links</h3>
+      <ul class="footer-links">
+        <li><a href="/pages/homepage.html">- Home</a></li>
+        <li><a href="/pages/events.html">- Events</a></li>
+        <li><a href="/pages/contact.html">- Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-contact">
+      <h3>Contact Us</h3>
+      <p><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Chlef, Algeria</p>
+      <p><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>aihouse@univ-chlef.dz</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" crossorigin="anonymous"></script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/navbar.js"></script>
+  <script src="/js/profile.js"></script>
 </body>
-
+>>>>>>> 40d503d7a84618931a4716b0372eaa8ee3e4191e
 </html>

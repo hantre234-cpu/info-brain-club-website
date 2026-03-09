@@ -5,9 +5,15 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; object-src 'none'; base-uri 'self';"
+          "value": "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; connect-src 'self'; object-src 'none'; base-uri 'self';"
         }
       ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/v1/:path*",
+      "destination": "http://173.249.28.246:8090/api/v1/:path*"
     }
   ]
 }

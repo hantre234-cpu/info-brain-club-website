@@ -1,336 +1,152 @@
-// zoom while scrolling
-const heroBg = document.querySelector(".hero-bg");
+/* ==========================================
+   HOMEPAGE JS
+   ========================================== */
 
-window.addEventListener("scroll", () => {
-    let scrollY = window.scrollY;
-    let scale = 1 + scrollY * 0.0005;
-    heroBg.style.transform = `scale(${scale})`;
-});
-
-// ===== Mini Image Slider =====
-(function() {
-    const slides = document.querySelectorAll('.mini-slide');
-    const dots = document.querySelectorAll('.dot');
-    const prevBtn = document.querySelector('.slick-prev');
-    const nextBtn = document.querySelector('.slick-next');
-    
-    let currentSlide = 0;
-    let slideInterval;
-    const intervalTime = 5000; // 5 seconds
-    
-    // Show specific slide
-    function showSlide(index) {
-        // clear exiting/active from all slides
-        slides.forEach(slide => {
-            slide.classList.remove('active', 'exiting');
-        });
-        dots.forEach(dot => dot.classList.remove('active'));
-
-        // handle index bounds
-        if (index >= slides.length) index = 0;
-        else if (index < 0) index = slides.length - 1;
-
-        // mark outgoing slide (currentSlide) if exists
-        if (slides[currentSlide]) {
-            slides[currentSlide].classList.add('exiting');
-        }
-
-        currentSlide = index;
-
-        // new slide will animate in from right due to base transform
-        slides[currentSlide].classList.add('active');
-        dots[currentSlide].classList.add('active');
-    }
-    
-    // Next slide
-    function nextSlide() {
-        showSlide(currentSlide + 1);
-    }
-    
-    // Previous slide
-    function prevSlide() {
-        showSlide(currentSlide - 1);
-    }
-    
-    // Start auto-slide
-    function startAutoSlide() {
-        slideInterval = setInterval(nextSlide, intervalTime);
-    }
-    
-    // Stop auto-slide
-    function stopAutoSlide() {
-        clearInterval(slideInterval);
-    }
-    
-    // Event listeners for arrows
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            prevSlide();
-            stopAutoSlide();
-            startAutoSlide();
-        });
-    }
-    
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            nextSlide();
-            stopAutoSlide();
-            startAutoSlide();
-        });
-    }
-    
-    // Event listeners for dots
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            showSlide(index);
-            stopAutoSlide();
-            startAutoSlide();
-        });
+// Parallax hero bg
+(function () {
+  const bg = document.getElementById('heroBg');
+  if (!bg) return;
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      bg.style.transform = `scale(${1 + window.scrollY * 0.0003})`;
+      ticking = false;
     });
-    
-    // Pause on hover
-    const slider = document.querySelector('.hero-slider');
-    if (slider) {
-        slider.addEventListener('mouseenter', stopAutoSlide);
-        slider.addEventListener('mouseleave', startAutoSlide);
-    }
-    
-    // Start auto-slide on load
-    startAutoSlide();
+  }, { passive: true });
 })();
 
-// ===== Mobile Navigation Toggle =====
-(function() {
-    const navToggle = document.querySelector('.nav-toggle');
-    const navLinks = document.querySelectorAll('.nav-links a');
-    
-    if (navToggle) {
-        navToggle.addEventListener('click', () => {
-            document.body.classList.toggle('nav-open');
-        });
-    }
-    
-    // Close menu when clicking a link
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            document.body.classList.remove('nav-open');
-        });
-    });
+// Reveal on scroll
+(function () {
+  const els = document.querySelectorAll('.reveal');
+  if (!els.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(el => io.observe(el));
 })();
 
-// ===== Active Navigation Link on Scroll & Reveal Animation =====
-(function() {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-links a');
-    const reveals = document.querySelectorAll(".reveal");
-    
-    function handleScroll() {
-        let current = '';
-        const scrollPos = window.pageYOffset + 100;
-        const windowHeight = window.innerHeight;
-        const elementVisible = 3;
-        
-        
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === '#' + current) {
-                link.classList.add('active');
-            }
-        });
+/* ── NEWS SECTION ─────────────────────────── */
+(async function loadNews() {
+  const grid = document.getElementById('newsGrid');
+  if (!grid) return;
 
-        // Reveal Animation
-        reveals.forEach(el => {
-            const elementTop = el.getBoundingClientRect().top;
-            if (elementTop < windowHeight - elementVisible) {
-                el.classList.add("active");
-            }
-        });
-    }
-    
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('load', () => {
-        handleScroll();
-        // Performance: Lazy load images
-        document.querySelectorAll('img').forEach(img => {
-            if (!img.getAttribute('loading')) {
-                img.setAttribute('loading', 'lazy');
-            }
-        });
+  // Strategy 1: same-origin proxy path (avoids mixed-content + CORS entirely)
+  const NEWS_API_PROXY  = '/api/v1/getinfo';
+  // Strategy 2: direct call (works only if server sends CORS headers and page is HTTP)
+  const NEWS_API_DIRECT = 'http://173.249.28.246:8090/api/v1/getinfo';
+  const NEWS_BASE = 'https://www.univ-chlef.dz/ar/?p=';
+
+  async function fetchNews() {
+    // Try the same-origin proxy first — no mixed-content, no CORS issue
+    try {
+      const res = await fetch(NEWS_API_PROXY, {
+        signal: AbortSignal.timeout(8000),
+      });
+      if (res.ok) return res.json();
+    } catch (_) { /* proxy not configured, fall through */ }
+
+    // Fall back to direct call with explicit CORS mode
+    const res = await fetch(NEWS_API_DIRECT, {
+      mode: 'cors',
+      headers: { 'Accept': 'application/json' },
+      signal: AbortSignal.timeout(8000),
     });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  }
+
+  try {
+    const { posts } = await fetchNews();
+
+    if (!posts?.length) {
+      grid.innerHTML = '<p class="news-error">No news available at the moment.</p>';
+      return;
+    }
+
+    grid.innerHTML = posts.slice(0, 6).map(p => `
+      <a class="news-card reveal" href="${NEWS_BASE}${p.id}" target="_blank" rel="noopener">
+        <img class="news-card-img" src="${escapeHtml(p.image)}" alt="" loading="lazy"
+             onerror="this.style.background='linear-gradient(135deg,#d4e8d4,#b8d2b8)';this.src=''">
+        <div class="news-card-body">
+          <span class="news-card-date">${escapeHtml(p.date)}</span>
+          <p class="news-card-title">${escapeHtml(p.title)}</p>
+          <span class="news-card-link">Read more →</span>
+        </div>
+      </a>
+    `).join('');
+
+    // trigger reveal for newly inserted cards
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    grid.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  } catch (err) {
+    console.warn('News API unavailable:', err.message);
+    grid.innerHTML = '<p class="news-error">University news temporarily unavailable.</p>';
+  }
 })();
 
-// ===== Smooth Scroll for Anchor Links =====
-(function() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                const headerOffset = 70;
-                const elementPosition = target.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-})();
+/* ── EVENTS SECTION ───────────────────────── */
+(async function loadEvents() {
+  const grid = document.getElementById('eventsGrid');
+  if (!grid) return;
 
-// ===== Dynamic Events Loading - Shared with Events Page =====
-(function() {
-    const eventsGrid = document.getElementById('events-grid');
-    const eventsEmpty = document.getElementById('events-empty');
-    
-    if (!eventsGrid) return;
-    
-    // Helper: Get event detail URL (same as events page)
-    function getEventDetailUrl(evt) {
-        if (!evt || !evt.id) return "/pages/events.html";
-        return "/pages/event-detail.html?id=" + encodeURIComponent(evt.id);
+  function eventDetailUrl(id) {
+    return id ? `/pages/event-detail.html?id=${encodeURIComponent(id)}` : '/pages/events.html';
+  }
+
+  function renderCard(ev) {
+    const img = ev.image_url || 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&w=800';
+    const taken = typeof ev.regis_user === 'number' ? ev.regis_user : 0;
+    const cap   = typeof ev.capacity === 'number' ? ev.capacity : null;
+    const url   = eventDetailUrl(ev.id);
+    return `
+      <article class="event-card reveal">
+        <div class="event-image">
+          <img src="${escapeHtml(img)}" alt="${escapeHtml(ev.title || 'Event')}" loading="lazy"
+               onerror="this.src='https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&w=800'">
+          ${ev.event_date ? `<div class="date-badge">${escapeHtml(ev.event_date)}</div>` : ''}
+        </div>
+        <div class="event-content">
+          <span class="cat-tag">${escapeHtml(ev.category || 'Event')}</span>
+          <h3 class="event-title">${escapeHtml(ev.title || 'Event')}</h3>
+          ${cap ? `<p class="event-seats">Seats: ${taken} / ${cap}</p>` : ''}
+          <a href="${url}" class="event-link">View details</a>
+          <a href="${url}" class="event-register-btn">Register</a>
+        </div>
+      </article>
+    `;
+  }
+
+  try {
+    const client = await getSupabaseClient();
+    const today  = new Date().toISOString().split('T')[0];
+    const { data, error } = await client
+      .from('events')
+      .select('id,title,category,event_date,event_time,image_url,capacity,regis_user')
+      .gte('event_date', today)
+      .order('event_date', { ascending: true })
+      .limit(4);
+
+    if (error) throw error;
+
+    if (!data?.length) {
+      grid.innerHTML = '<p class="events-empty">No upcoming events at the moment. Check back soon!</p>';
+      return;
     }
-    
-    // Helper: Create event card HTML (matches events page style)
-    function createEventCard(evt) {
-        var dateText = evt.event_date || "";
-        var taken = typeof evt.regis_user === "number" ? evt.regis_user : 0;
-        var capacityText = typeof evt.capacity === "number" ? String(evt.capacity) : "—";
-        var seatsText = evt.capacity ? "Seats: " + taken + " / " + capacityText : "";
-        var category = evt.category || "Event";
-        var img = evt.image_url ||
-            "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&w=800";
-        
-        var detailsUrl = getEventDetailUrl(evt);
-        
-        return (
-            '<article class="event-card reveal active" data-event="' + (evt.title || "") + '">' +
-            '  <div class="event-image">' +
-            '    <img src="' + img + '" alt="' + (evt.title || "Event") + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=\\\'image-placeholder\\\'>' + category[0] + '</div>\'">' +
-            (dateText ? '    <div class="date-badge">' + dateText + "</div>" : "") +
-            "  </div>" +
-            '  <div class="event-content">' +
-            '    <span class="cat-tag">' + category + "</span>" +
-            '    <h3 class="event-title">' + (evt.title || "Event") + "</h3>" +
-            (seatsText ? '    <p class="event-seats" style="font-size:0.85rem;color:#666;margin-bottom:8px;">' + seatsText + "</p>" : "") +
-            '    <a href="' + detailsUrl + '" class="event-link">View More →</a>' +
-            "  </div>" +
-            "</article>"
-        );
-    }
-    
-    // Helper: Get Supabase client (same pattern as events page)
-    async function getSupabaseClient() {
-        if (typeof createClient === "function") {
-            return createClient();
-        }
-        if (typeof supabase !== "undefined" && supabase.from) {
-            return supabase;
-        }
-        throw new Error("Supabase not available");
-    }
-    
-    // Main: Load events from database (same query as events page)
-    async function loadEvents() {
-        // Show loading state
-        eventsGrid.innerHTML = '<div class="events-loading" style="grid-column:1/-1;text-align:center;padding:40px;"><div class="spinner" style="width:40px;height:40px;border:3px solid #e2e8f0;border-top-color:#FF6B00;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;"></div><p>Loading events...</p></div>';
-        
-        try {
-            var client = await getSupabaseClient();
-            
-            // Same query as events page: future events, ordered by date, limit 4
-            var response = await client
-                .from("events")
-                .select("id,title,description,location,event_date,event_time,category,image_url,capacity,regis_user")
-                .gte("event_date", new Date().toISOString().split('T')[0]) // Only future events
-                .order("event_date", { ascending: true })
-                .order("event_time", { ascending: true })
-                .limit(4);
-            
-            if (response.error) {
-                throw response.error;
-            }
-            
-            var events = response.data || [];
-            
-            // Check if we have events
-            if (!events.length) {
-                eventsGrid.innerHTML = '';
-                if (eventsEmpty) eventsEmpty.classList.remove('hidden');
-                return;
-            }
-            
-            // Hide empty state
-            if (eventsEmpty) eventsEmpty.classList.add('hidden');
-            
-            // Render events
-            eventsGrid.innerHTML = events.map(createEventCard).join("");
-            
-            // Re-trigger reveal animation for new elements
-            const newCards = eventsGrid.querySelectorAll('.event-card');
-            newCards.forEach((card, index) => {
-                setTimeout(() => {
-                    card.classList.add('active');
-                }, index * 100);
-            });
-            
-        } catch (err) {
-            console.error('Failed to load events:', err);
-            showFallbackEvents();
-        }
-    }
-    
-    // Fallback: Static events if database fails
-    function showFallbackEvents() {
-        var fallbackEvents = [
-            {
-                id: 1,
-                title: "Deep Learning Workshop Series",
-                event_date: "March 15, 2026",
-                category: "Training",
-                location: "Room 101",
-                image_url: "https://images.unsplash.com/photo-1591453089816-0fbb971b454c?auto=format&w=800",
-                regis_user: 0,
-                capacity: 30
-            },
-            {
-                id: 2,
-                title: "AI Ethics Roundtable",
-                event_date: "March 22, 2026",
-                category: "Ethics",
-                location: "Room 002",
-                image_url: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&w=800",
-                regis_user: 0,
-                capacity: 20
-            },
-            {
-                id: 3,
-                title: "Ai Workshop",
-                event_date: "January 28, 2026",
-                category: "Workshop",
-                image_url: "https://www.createit.com/wp-content/uploads/2026/02/aitrainigng.webp",
-                regis_user: 0,
-                capacity: 30
-            },
-        ];
-        
-        if (eventsEmpty) eventsEmpty.classList.add('hidden');
-        eventsGrid.innerHTML = fallbackEvents.map(createEventCard).join("");
-        
-        // Trigger animations
-        const newCards = eventsGrid.querySelectorAll('.event-card');
-        newCards.forEach((card, index) => {
-            setTimeout(() => {
-                card.classList.add('active');
-            }, index * 100);
-        });
-    }
-    
-    // Load events when page loads
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadEvents);
-    } else {
-        loadEvents();
-    }
+
+    grid.innerHTML = data.map(renderCard).join('');
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    grid.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  } catch (err) {
+    console.warn('Events load failed:', err);
+    grid.innerHTML = '<p class="events-empty">Could not load events. Please try again later.</p>';
+  }
 })();

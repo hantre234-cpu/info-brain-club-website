@@ -409,3 +409,6 @@ body {
 } 
 
 .social-icons a svg { width: 20px; height: 20px; }
+
+/* ── Remove old first-section hero (replaced by page-hero in homepage.css) ── */
+.about-page { display: none !important; }
